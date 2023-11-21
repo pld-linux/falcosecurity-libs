@@ -1,0 +1,65 @@
+--- libs-0.13.4/userspace/libsinsp/CMakeLists.txt.orig	2023-10-26 18:38:45.000000000 +0200
++++ libs-0.13.4/userspace/libsinsp/CMakeLists.txt	2023-11-19 22:17:18.968902364 +0100
+@@ -201,7 +201,6 @@ set_sinsp_target_properties(sinsp)
+ 
+ target_link_libraries(sinsp
+ 		PUBLIC scap
+-		INTERFACE
+ 			"${CURL_LIBRARIES}"
+ 			"${JSONCPP_LIB}"
+ 			"${RE2_LIB}"
+@@ -216,7 +215,7 @@ set(SINSP_PKGCONFIG_LIBRARIES
+ 
+ if(NOT EMSCRIPTEN)
+ 	target_link_libraries(sinsp
+-		INTERFACE
++		PUBLIC
+ 			"${CARES_LIB}"
+ 		PRIVATE
+ 		"${TBB_LIB}"
+@@ -277,7 +276,7 @@ if(NOT WIN32)
+ 					PRIVATE
+ 						"cri_v1alpha2"
+ 						"cri_v1"
+-					INTERFACE
++					PUBLIC
+ 						"${GRPC_LIBRARIES}"
+ 						"${GRPCPP_LIB}"
+ 						"${GRPC_LIB}"
+@@ -286,17 +285,16 @@ if(NOT WIN32)
+ 						"${CARES_LIB}"
+ 						"${JQ_LIB}")
+ 			list(APPEND SINSP_PKGCONFIG_LIBRARIES
+-						"${GRPC_LIBRARIES}"
+-						"${GRPCPP_LIB}"
+-						"${GRPC_LIB}"
+-						"${GPR_LIB}"
++						"-lgrpc++"
++						"-lgrpc"
++						"-lgpr"
+ 						"${PROTOBUF_LIB}"
+ 						"${CARES_LIB}"
+ 						"${JQ_LIB}")
+ 
+ 			if(NOT MUSL_OPTIMIZED_BUILD)
+-				target_link_libraries(sinsp INTERFACE rt anl)
+-				list(APPEND SINSP_PKGCONFIG_LIBRARIES rt anl)
++				target_link_libraries(sinsp INTERFACE rt)
++				list(APPEND SINSP_PKGCONFIG_LIBRARIES rt)
+ 			endif()
+ 
+ 		else()
+@@ -312,11 +310,11 @@ if(NOT WIN32)
+ 		endif()
+ 	endif() # NOT APPLE
+ 
+-	target_link_libraries(sinsp INTERFACE "${OPENSSL_LIBRARIES}")
++	target_link_libraries(sinsp PUBLIC "${OPENSSL_LIBRARIES}")
+ 	list(APPEND SINSP_PKGCONFIG_LIBRARIES "${OPENSSL_LIBRARIES}")
+ 
+ 	if(WITH_CHISEL)
+-		target_link_libraries(sinsp INTERFACE "${LUAJIT_LIB}")
++		target_link_libraries(sinsp PUBLIC "${LUAJIT_LIB}")
+ 		list(APPEND SINSP_PKGCONFIG_LIBRARIES "${LUAJIT_LIB}")
+ 	endif()
+ 	
