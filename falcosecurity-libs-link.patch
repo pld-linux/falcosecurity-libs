@@ -1,14 +1,6 @@
---- libs-0.13.4/userspace/libsinsp/CMakeLists.txt.orig	2023-10-26 18:38:45.000000000 +0200
-+++ libs-0.13.4/userspace/libsinsp/CMakeLists.txt	2023-11-19 22:17:18.968902364 +0100
-@@ -201,7 +201,6 @@ set_sinsp_target_properties(sinsp)
- 
- target_link_libraries(sinsp
- 		PUBLIC scap
--		INTERFACE
- 			"${CURL_LIBRARIES}"
- 			"${JSONCPP_LIB}"
- 			"${RE2_LIB}"
-@@ -216,7 +215,7 @@ set(SINSP_PKGCONFIG_LIBRARIES
+--- libs-0.14.0/userspace/libsinsp/CMakeLists.txt.orig	2023-12-19 16:06:08.000000000 +0100
++++ libs-0.14.0/userspace/libsinsp/CMakeLists.txt	2023-12-30 18:19:56.916336146 +0100
+@@ -202,7 +202,7 @@ set(SINSP_PKGCONFIG_LIBRARIES
  
  if(NOT EMSCRIPTEN)
  	target_link_libraries(sinsp
@@ -17,18 +9,18 @@
  			"${CARES_LIB}"
  		PRIVATE
  		"${TBB_LIB}"
-@@ -277,7 +276,7 @@ if(NOT WIN32)
+@@ -264,7 +264,7 @@ if(NOT WIN32)
  					PRIVATE
- 						"cri_v1alpha2"
- 						"cri_v1"
+ 						cri_v1alpha2
+ 						cri_v1
 -					INTERFACE
 +					PUBLIC
  						"${GRPC_LIBRARIES}"
  						"${GRPCPP_LIB}"
  						"${GRPC_LIB}"
-@@ -286,17 +285,16 @@ if(NOT WIN32)
+@@ -273,45 +273,44 @@ if(NOT WIN32)
  						"${CARES_LIB}"
- 						"${JQ_LIB}")
+ 			)
  			list(APPEND SINSP_PKGCONFIG_LIBRARIES
 -						"${GRPC_LIBRARIES}"
 -						"${GRPCPP_LIB}"
@@ -39,18 +31,20 @@
 +						"-lgpr"
  						"${PROTOBUF_LIB}"
  						"${CARES_LIB}"
- 						"${JQ_LIB}")
+ 			)
  
  			if(NOT MUSL_OPTIMIZED_BUILD)
 -				target_link_libraries(sinsp INTERFACE rt anl)
 -				list(APPEND SINSP_PKGCONFIG_LIBRARIES rt anl)
-+				target_link_libraries(sinsp INTERFACE rt)
++				target_link_libraries(sinsp PUBLIC rt)
 +				list(APPEND SINSP_PKGCONFIG_LIBRARIES rt)
  			endif()
  
  		else()
-@@ -312,11 +310,11 @@ if(NOT WIN32)
- 		endif()
+-			target_link_libraries(sinsp INTERFACE rt)
++			target_link_libraries(sinsp PUBLIC rt)
+ 			list(APPEND SINSP_PKGCONFIG_LIBRARIES rt)
+ 		endif() # NOT MINIMAL_BUILD
  	endif() # NOT APPLE
  
 -	target_link_libraries(sinsp INTERFACE "${OPENSSL_LIBRARIES}")
@@ -62,4 +56,31 @@
 +		target_link_libraries(sinsp PUBLIC "${LUAJIT_LIB}")
  		list(APPEND SINSP_PKGCONFIG_LIBRARIES "${LUAJIT_LIB}")
  	endif()
- 	
+ 
+-	target_link_libraries(sinsp INTERFACE dl pthread)
++	target_link_libraries(sinsp PUBLIC dl pthread)
+ 	list(APPEND SINSP_PKGCONFIG_LIBRARIES dl pthread)
+ 
+ 	if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+ 		if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS 9.0)
+-			target_link_libraries(sinsp INTERFACE stdc++fs)
++			target_link_libraries(sinsp PUBLIC stdc++fs)
+ 			list(APPEND SINSP_PKGCONFIG_LIBRARIES stdc++fs)
+ 		endif()
+ 	endif()
+ else()
+ 	if(WITH_CHISEL)
+-		target_link_libraries(sinsp INTERFACE "${LUAJIT_LIB}")
++		target_link_libraries(sinsp PUBLIC "${LUAJIT_LIB}")
+ 		list(APPEND SINSP_PKGCONFIG_LIBRARIES "${LUAJIT_LIB}")
+ 	endif()
+ endif() # NOT WIN32
+@@ -354,7 +354,7 @@ foreach(sinsp_lib ${SINSP_PKGCONFIG_LIBR
+ 		# We have a path. Convert it to -L<dir> + -l<lib>.
+ 		get_filename_component(sinsp_lib_dir ${sinsp_lib} DIRECTORY)
+ 		list(APPEND SINSP_PKG_CONFIG_LIBDIRS -L${sinsp_lib_dir})
+-		get_filename_component(sinsp_lib_base ${sinsp_lib} NAME_WE)
++		get_filename_component(sinsp_lib_base ${sinsp_lib} NAME_WLE)
+ 		string(REGEX REPLACE "^lib" "" sinsp_lib_base ${sinsp_lib_base})
+ 		list(APPEND SINSP_PKG_CONFIG_LIBS -l${sinsp_lib_base})
+ 	elseif(${sinsp_lib} STREQUAL "scap")

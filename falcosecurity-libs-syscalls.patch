@@ -1,9 +1,9 @@
---- libs-0.13.4/driver/syscall_table64.c.orig	2023-10-26 18:38:45.000000000 +0200
-+++ libs-0.13.4/driver/syscall_table64.c	2023-11-19 10:03:55.040625438 +0100
-@@ -23,8 +23,10 @@ or GPL2.txt for full copies of the licen
- #include "syscall_compat_aarch64.h"
- #elif defined(__s390x__)
- #include "syscall_compat_s390x.h"
+--- libs-0.14.0/driver/syscall_table64.c.orig	2023-12-30 17:45:48.120768757 +0100
++++ libs-0.14.0/driver/syscall_table64.c	2023-12-30 17:47:41.180156262 +0100
+@@ -28,8 +28,10 @@ or GPL2.txt for full copies of the licen
+ #include "syscall_compat_ppc64le.h"
+ #elif defined(__riscv)
+ #include "syscall_compat_riscv64.h"
 +#else // fake
 +#include "syscall_compat_x86_64.h"
  #endif /* __x86_64__ */

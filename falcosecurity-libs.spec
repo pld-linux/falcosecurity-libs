@@ -11,13 +11,13 @@
 Summary:	Falco foundation libraries
 Summary(pl.UTF-8):	Biblioteki podstawowe Falco
 Name:		falcosecurity-libs
-Version:	0.13.4
+Version:	0.14.0
 Release:	1
 License:	Apache v2.0
 Group:		Libraries
 #Source0Download: https://github.com/falcosecurity/libs/releases
 Source0:	https://github.com/falcosecurity/libs/archive/%{version}/libs-%{version}.tar.gz
-# Source0-md5:	1dcb3f6ffbd91e60a2087b816c5d6425
+# Source0-md5:	06501d3dde9861d7287bb333c1b6e772
 Source1:	https://raw.githubusercontent.com/istio/proxy/1.18.2/extensions/common/wasm/base64.h
 # Source1-md5:	71299190977eb7c1971333fd53c70281
 Patch0:		%{name}-syscalls.patch
@@ -48,7 +48,7 @@ BuildRequires:	zlib-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # missing symbols from libscap and libsinsp
-%define		skip_post_check_so	libscap_engine_kmod.so.* libscap_engine_udig.so.* 
+%define		skip_post_check_so	libscap_engine_kmod.so.*
 
 %description
 This package contains libsinsp, libscap and the eBPF probes.
@@ -128,24 +128,27 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc NOTICES README.md
-%dir %{_libdir}/falcosecurity
-%attr(755,root,root) %{_libdir}/falcosecurity/libscap.so.*
-%attr(755,root,root) %{_libdir}/falcosecurity/libscap_engine_bpf.so.*
-%attr(755,root,root) %{_libdir}/falcosecurity/libscap_engine_kmod.so.*
-%attr(755,root,root) %{_libdir}/falcosecurity/libscap_engine_nodriver.so.*
-%attr(755,root,root) %{_libdir}/falcosecurity/libscap_engine_source_plugin.so.*
-%attr(755,root,root) %{_libdir}/falcosecurity/libscap_engine_udig.so.*
-%attr(755,root,root) %{_libdir}/falcosecurity/libsinsp.so.*
+%attr(755,root,root) %{_libdir}/libscap.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libscap.so.0
+%attr(755,root,root) %{_libdir}/libscap_engine_bpf.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libscap_engine_bpf.so.0
+%attr(755,root,root) %{_libdir}/libscap_engine_kmod.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libscap_engine_kmod.so.0
+%attr(755,root,root) %{_libdir}/libscap_engine_nodriver.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libscap_engine_nodriver.so.0
+%attr(755,root,root) %{_libdir}/libscap_engine_source_plugin.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libscap_engine_source_plugin.so.0
+%attr(755,root,root) %{_libdir}/libsinsp.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libsinsp.so.0
 
 %files devel
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/falcosecurity/libscap.so
-%attr(755,root,root) %{_libdir}/falcosecurity/libscap_engine_bpf.so
-%attr(755,root,root) %{_libdir}/falcosecurity/libscap_engine_kmod.so
-%attr(755,root,root) %{_libdir}/falcosecurity/libscap_engine_nodriver.so
-%attr(755,root,root) %{_libdir}/falcosecurity/libscap_engine_source_plugin.so
-%attr(755,root,root) %{_libdir}/falcosecurity/libscap_engine_udig.so
-%attr(755,root,root) %{_libdir}/falcosecurity/libsinsp.so
+%attr(755,root,root) %{_libdir}/libscap.so
+%attr(755,root,root) %{_libdir}/libscap_engine_bpf.so
+%attr(755,root,root) %{_libdir}/libscap_engine_kmod.so
+%attr(755,root,root) %{_libdir}/libscap_engine_nodriver.so
+%attr(755,root,root) %{_libdir}/libscap_engine_source_plugin.so
+%attr(755,root,root) %{_libdir}/libsinsp.so
 %{_includedir}/falcosecurity
 %{_pkgconfigdir}/libscap.pc
 %{_pkgconfigdir}/libsinsp.pc
