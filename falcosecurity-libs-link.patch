@@ -1,6 +1,6 @@
---- libs-0.14.0/userspace/libsinsp/CMakeLists.txt.orig	2023-12-19 16:06:08.000000000 +0100
-+++ libs-0.14.0/userspace/libsinsp/CMakeLists.txt	2023-12-30 18:19:56.916336146 +0100
-@@ -202,7 +202,7 @@ set(SINSP_PKGCONFIG_LIBRARIES
+--- libs-0.17.3/userspace/libsinsp/CMakeLists.txt.orig	2024-08-07 10:36:46.000000000 +0200
++++ libs-0.17.3/userspace/libsinsp/CMakeLists.txt	2024-08-25 12:34:45.385155574 +0200
+@@ -179,7 +179,7 @@ set(SINSP_PKGCONFIG_LIBRARIES
  
  if(NOT EMSCRIPTEN)
  	target_link_libraries(sinsp
@@ -9,7 +9,7 @@
  			"${CARES_LIB}"
  		PRIVATE
  		"${TBB_LIB}"
-@@ -264,7 +264,7 @@ if(NOT WIN32)
+@@ -240,7 +240,7 @@ if(NOT WIN32)
  					PRIVATE
  						cri_v1alpha2
  						cri_v1
@@ -18,7 +18,7 @@
  						"${GRPC_LIBRARIES}"
  						"${GRPCPP_LIB}"
  						"${GRPC_LIB}"
-@@ -273,45 +273,44 @@ if(NOT WIN32)
+@@ -249,34 +249,33 @@ if(NOT WIN32)
  						"${CARES_LIB}"
  			)
  			list(APPEND SINSP_PKGCONFIG_LIBRARIES
@@ -51,12 +51,6 @@
 +	target_link_libraries(sinsp PUBLIC "${OPENSSL_LIBRARIES}")
  	list(APPEND SINSP_PKGCONFIG_LIBRARIES "${OPENSSL_LIBRARIES}")
  
- 	if(WITH_CHISEL)
--		target_link_libraries(sinsp INTERFACE "${LUAJIT_LIB}")
-+		target_link_libraries(sinsp PUBLIC "${LUAJIT_LIB}")
- 		list(APPEND SINSP_PKGCONFIG_LIBRARIES "${LUAJIT_LIB}")
- 	endif()
- 
 -	target_link_libraries(sinsp INTERFACE dl pthread)
 +	target_link_libraries(sinsp PUBLIC dl pthread)
  	list(APPEND SINSP_PKGCONFIG_LIBRARIES dl pthread)
@@ -68,14 +62,7 @@
  			list(APPEND SINSP_PKGCONFIG_LIBRARIES stdc++fs)
  		endif()
  	endif()
- else()
- 	if(WITH_CHISEL)
--		target_link_libraries(sinsp INTERFACE "${LUAJIT_LIB}")
-+		target_link_libraries(sinsp PUBLIC "${LUAJIT_LIB}")
- 		list(APPEND SINSP_PKGCONFIG_LIBRARIES "${LUAJIT_LIB}")
- 	endif()
- endif() # NOT WIN32
-@@ -354,7 +354,7 @@ foreach(sinsp_lib ${SINSP_PKGCONFIG_LIBR
+@@ -321,7 +320,7 @@ foreach(sinsp_lib ${SINSP_PKGCONFIG_LIBR
  		# We have a path. Convert it to -L<dir> + -l<lib>.
  		get_filename_component(sinsp_lib_dir ${sinsp_lib} DIRECTORY)
  		list(APPEND SINSP_PKG_CONFIG_LIBDIRS -L${sinsp_lib_dir})

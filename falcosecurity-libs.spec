@@ -2,24 +2,18 @@
 #
 # Conditional build:
 %bcond_without	apidocs		# API documentation
-%bcond_without	luajit		# stock Lua 5.1 instead of LuaJIT
 %bcond_without	static_libs	# static libraries
 #
-%ifnarch %{ix86} %{x8664} %{arm} mips ppc
-%undefine	with_luajit
-%endif
 Summary:	Falco foundation libraries
 Summary(pl.UTF-8):	Biblioteki podstawowe Falco
 Name:		falcosecurity-libs
-Version:	0.14.0
-Release:	2
+Version:	0.17.3
+Release:	1
 License:	Apache v2.0
 Group:		Libraries
 #Source0Download: https://github.com/falcosecurity/libs/releases
 Source0:	https://github.com/falcosecurity/libs/archive/%{version}/libs-%{version}.tar.gz
-# Source0-md5:	06501d3dde9861d7287bb333c1b6e772
-Source1:	https://raw.githubusercontent.com/istio/proxy/1.18.2/extensions/common/wasm/base64.h
-# Source1-md5:	71299190977eb7c1971333fd53c70281
+# Source0-md5:	603e6404f2895a1fdcd19f019f254176
 Patch0:		%{name}-syscalls.patch
 Patch1:		%{name}-link.patch
 URL:		https://github.com/falcosecurity/libs
@@ -32,12 +26,6 @@ BuildRequires:	grpc-devel
 BuildRequires:	gtest-devel
 BuildRequires:	jq-devel
 BuildRequires:	jsoncpp-devel
-%if %{with luajit}
-BuildRequires:	luajit-devel
-%else
-BuildRequires:	lua51-devel >= 5.1
-BuildConflicts:	luajit-devel
-%endif
 BuildRequires:	openssl-devel
 BuildRequires:	protobuf-devel
 BuildRequires:	re2-devel
@@ -93,11 +81,10 @@ Statyczna biblioteka %{name}.
 %patch0 -p1
 %patch1 -p1
 
-install -d build/b64
-cp -p %{SOURCE1} build/b64/base64.h
 cp -p /usr/include/uthash.h userspace/libscap/uthash.h
 
 %build
+install -d build
 cd build
 %cmake .. \
 	-DBUILD_DRIVER=OFF \
@@ -108,8 +95,7 @@ cd build
 	-DCMAKE_INSTALL_LIBDIR=%{_lib} \
 	-DCREATE_TEST_TARGETS=OFF \
 	-DENABLE_DKMS=OFF \
-	-DUSE_BUNDLED_DEPS=OFF \
-	-DWITH_CHISEL=ON
+	-DUSE_BUNDLED_DEPS=OFF
 
 %{__make}
 

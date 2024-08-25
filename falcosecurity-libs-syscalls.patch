@@ -1,14 +1,10 @@
---- libs-0.14.0/driver/syscall_table64.c.orig	2023-12-30 17:45:48.120768757 +0100
-+++ libs-0.14.0/driver/syscall_table64.c	2023-12-30 17:47:41.180156262 +0100
-@@ -28,8 +28,10 @@ or GPL2.txt for full copies of the licen
- #include "syscall_compat_ppc64le.h"
- #elif defined(__riscv)
+--- libs-0.17.3/driver/syscall_compat.h.orig	2024-08-07 10:36:46.000000000 +0200
++++ libs-0.17.3/driver/syscall_compat.h	2024-08-25 13:48:10.397958252 +0200
+@@ -12,4 +12,7 @@
  #include "syscall_compat_riscv64.h"
-+#else // fake
+ #elif defined(__loongarch__)
+ #include "syscall_compat_loongarch64.h"
++#else
++// fake
 +#include "syscall_compat_x86_64.h"
  #endif /* __x86_64__ */
--#elif defined(_MSC_VER) || defined(__EMSCRIPTEN__)
-+#else
- // these are Linux syscall numbers and obviously meaningless for Windows/macOS
- // but we need *some* definition so that we have a mapping for scap_ppm_sc.c
- #include "syscall_compat_x86_64.h"
