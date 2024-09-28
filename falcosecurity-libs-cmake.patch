@@ -1,0 +1,10 @@
+--- libs-0.18.1/userspace/libscap/engine/gvisor/CMakeLists.txt.orig	2024-09-25 14:54:11.000000000 +0200
++++ libs-0.18.1/userspace/libscap/engine/gvisor/CMakeLists.txt	2024-09-28 16:40:16.775134205 +0200
+@@ -74,6 +74,7 @@ if(BUILD_SHARED_LIBS)
+ 	add_dependencies(scap_engine_gvisor_o uthash)
+ 	add_dependencies(scap scap_engine_gvisor_o)
+ 	target_sources(scap PRIVATE $<TARGET_OBJECTS:scap_engine_gvisor_o>)
++	target_include_directories(scap_engine_gvisor_o PRIVATE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_BINARY_DIR} ${CMAKE_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/userspace)
+ else()
+ 	add_library(
+ 		scap_engine_gvisor ${scap_engine_gvisor_sources} ${scap_engine_gvisor_generated_sources}

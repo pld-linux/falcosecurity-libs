@@ -1,4 +1,6 @@
-# TODO: build drivers (like with BUILD_DRIVER=ON, eventually DKMS; only x86_64, aarch64, s390x?)
+# TODO:
+# - build drivers (like with BUILD_DRIVER=ON, eventually DKMS; only x86_64, aarch64, s390x?)
+# - system bs_threadpool
 #
 # Conditional build:
 %bcond_without	apidocs		# API documentation
@@ -7,15 +9,16 @@
 Summary:	Falco foundation libraries
 Summary(pl.UTF-8):	Biblioteki podstawowe Falco
 Name:		falcosecurity-libs
-Version:	0.17.3
+Version:	0.18.1
 Release:	1
 License:	Apache v2.0
 Group:		Libraries
 #Source0Download: https://github.com/falcosecurity/libs/releases
 Source0:	https://github.com/falcosecurity/libs/archive/%{version}/libs-%{version}.tar.gz
-# Source0-md5:	603e6404f2895a1fdcd19f019f254176
+# Source0-md5:	f89553c9aba58f669deabdbe64d1d808
 Patch0:		%{name}-syscalls.patch
 Patch1:		%{name}-link.patch
+Patch2:		%{name}-cmake.patch
 URL:		https://github.com/falcosecurity/libs
 BuildRequires:	c-ares-devel
 BuildRequires:	cmake >= 3.12
@@ -26,6 +29,7 @@ BuildRequires:	grpc-devel
 BuildRequires:	gtest-devel
 BuildRequires:	jq-devel
 BuildRequires:	jsoncpp-devel
+BuildRequires:	libbpf-devel
 BuildRequires:	openssl-devel
 BuildRequires:	protobuf-devel
 BuildRequires:	re2-devel
@@ -80,6 +84,7 @@ Statyczna biblioteka %{name}.
 %setup -q -n libs-%{version}
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 cp -p /usr/include/uthash.h userspace/libscap/uthash.h
 
