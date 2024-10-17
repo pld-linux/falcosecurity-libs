@@ -1,0 +1,38 @@
+--- libs-0.18.1/userspace/libscap/libscap.pc.in.orig	2024-09-25 14:54:11.000000000 +0200
++++ libs-0.18.1/userspace/libscap/libscap.pc.in	2024-10-16 19:22:43.611559093 +0200
+@@ -1,10 +1,10 @@
+-prefix=${pcfiledir}/../..
+-libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
++prefix=@CMAKE_INSTALL_PREFIX@
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
+ 
+ Name: libscap
+ Description: lib for System CAPture
+ Version: @FALCOSECURITY_LIBS_VERSION@
+ 
+-Libs: -L${libdir} @LIBSCAP_LINK_LIBDIRS_FLAGS@ @LIBSCAP_LINK_LIBRARIES_FLAGS@
+-Cflags: -I${includedir}/@LIBS_PACKAGE_NAME@/libscap
++Libs: -L${libdir} @LIBSCAP_LINK_LIBRARIES_FLAGS@
++Cflags: -I${includedir}/@LIBS_PACKAGE_NAME@ -I${includedir}/@LIBS_PACKAGE_NAME@/libscap
+--- libs-0.18.1/userspace/libsinsp/libsinsp.pc.in.orig	2024-09-25 14:54:11.000000000 +0200
++++ libs-0.18.1/userspace/libsinsp/libsinsp.pc.in	2024-10-16 19:26:59.433506521 +0200
+@@ -1,11 +1,12 @@
+-prefix=${pcfiledir}/../..
+-libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
++prefix=@CMAKE_INSTALL_PREFIX@
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
+ 
+ Name: libsinsp
+ Description: lib for System INSPection
+ Version: @FALCOSECURITY_LIBS_VERSION@
+ 
+ Requires: libscap
+-Libs: -L${libdir} -lsinsp @SINSP_PKG_CONFIG_LIBDIRS@ @SINSP_PKG_CONFIG_LIBS@
+-Cflags: -I${includedir}/@LIBS_PACKAGE_NAME@/libsinsp @SINSP_PKG_CONFIG_INCLUDES@
++Libs: -L${libdir} -lsinsp
++Libs.private: @SINSP_PKG_CONFIG_LIBS@
++Cflags: -I${includedir}/@LIBS_PACKAGE_NAME@ -I${includedir}/@LIBS_PACKAGE_NAME@/libsinsp -I/usr/include/jsoncpp

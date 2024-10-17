@@ -10,7 +10,7 @@ Summary:	Falco foundation libraries
 Summary(pl.UTF-8):	Biblioteki podstawowe Falco
 Name:		falcosecurity-libs
 Version:	0.18.1
-Release:	1
+Release:	2
 License:	Apache v2.0
 Group:		Libraries
 #Source0Download: https://github.com/falcosecurity/libs/releases
@@ -19,6 +19,7 @@ Source0:	https://github.com/falcosecurity/libs/archive/%{version}/libs-%{version
 Patch0:		%{name}-syscalls.patch
 Patch1:		%{name}-link.patch
 Patch2:		%{name}-cmake.patch
+Patch3:		%{name}-pc.patch
 URL:		https://github.com/falcosecurity/libs
 BuildRequires:	c-ares-devel
 BuildRequires:	cmake >= 3.12
@@ -85,6 +86,7 @@ Statyczna biblioteka %{name}.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 cp -p /usr/include/uthash.h userspace/libscap/uthash.h
 
@@ -99,6 +101,7 @@ cd build
 	-DCMAKE_INSTALL_INCLUDEDIR=include \
 	-DCMAKE_INSTALL_LIBDIR=%{_lib} \
 	-DCREATE_TEST_TARGETS=OFF \
+	-DFALCOSECURITY_LIBS_VERSION=%{version} \
 	-DENABLE_DKMS=OFF \
 	-DUSE_BUNDLED_DEPS=OFF
 
