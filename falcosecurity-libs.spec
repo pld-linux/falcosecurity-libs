@@ -9,39 +9,29 @@
 Summary:	Falco foundation libraries
 Summary(pl.UTF-8):	Biblioteki podstawowe Falco
 Name:		falcosecurity-libs
-Version:	0.18.1
-Release:	4
+Version:	0.22.1
+Release:	1
 License:	Apache v2.0
 Group:		Libraries
 #Source0Download: https://github.com/falcosecurity/libs/releases
 Source0:	https://github.com/falcosecurity/libs/archive/%{version}/libs-%{version}.tar.gz
-# Source0-md5:	f89553c9aba58f669deabdbe64d1d808
+# Source0-md5:	60567f6c088e5da7941c5b3c7862cda7
 Patch0:		%{name}-syscalls.patch
 Patch1:		%{name}-link.patch
-Patch2:		%{name}-cmake.patch
 Patch3:		%{name}-pc.patch
 URL:		https://github.com/falcosecurity/libs
-BuildRequires:	c-ares-devel
 BuildRequires:	cmake >= 3.12
-BuildRequires:	curl-devel
 # libelf
 BuildRequires:	elfutils-devel
-BuildRequires:	grpc-devel
-BuildRequires:	gtest-devel
-BuildRequires:	jq-devel
 BuildRequires:	jsoncpp-devel
-BuildRequires:	libbpf-devel
-BuildRequires:	openssl-devel
-BuildRequires:	protobuf-devel
 BuildRequires:	re2-devel
 BuildRequires:	tbb-devel
-BuildRequires:	tinydir-devel
 BuildRequires:	valijson-devel
 BuildRequires:	zlib-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-# missing symbols from libscap, libsinsp and libprotobuf
-%define		skip_post_check_so	libscap_engine_kmod.so.* libsinsp.so.*
+# cyclic symbol dependency with libscap.so.*
+%define		skip_post_check_so	libscap_engine_kmod.so.*
 
 %description
 This package contains libsinsp, libscap and the eBPF probes.
@@ -69,23 +59,10 @@ Header files for Falco library.
 %description devel -l pl.UTF-8
 Pliki nagłówkowe biblioteki Falco.
 
-%package static
-Summary:	Static %{name} library
-Summary(pl.UTF-8):	Statyczna biblioteka %{name}
-Group:		Development/Libraries
-Requires:	%{name}-devel = %{version}-%{release}
-
-%description static
-Static %{name} library.
-
-%description static -l pl.UTF-8
-Statyczna biblioteka %{name}.
-
 %prep
 %setup -q -n libs-%{version}
 %patch -P0 -p1
 %patch -P1 -p1
-%patch -P2 -p1
 %patch -P3 -p1
 
 cp -p /usr/include/uthash.h userspace/libscap/uthash.h

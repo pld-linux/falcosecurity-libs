@@ -1,38 +1,38 @@
---- libs-0.18.1/userspace/libscap/libscap.pc.in.orig	2024-09-25 14:54:11.000000000 +0200
-+++ libs-0.18.1/userspace/libscap/libscap.pc.in	2024-10-16 19:22:43.611559093 +0200
-@@ -1,10 +1,10 @@
--prefix=${pcfiledir}/../..
+--- libs-0.22.1/userspace/libscap/libscap.pc.in.orig	2025-10-20 12:37:34.000000000 +0200
++++ libs-0.22.1/userspace/libscap/libscap.pc.in	2025-11-03 22:24:52.356817472 +0100
+@@ -1,6 +1,6 @@
+-prefix=${pcfiledir}/@PKGCONFIG_RELATIVE_PREFIX@
 -libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@
--includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@/@LIBS_PACKAGE_NAME@
 +prefix=@CMAKE_INSTALL_PREFIX@
 +libdir=@CMAKE_INSTALL_FULL_LIBDIR@
-+includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@/@LIBS_PACKAGE_NAME@
  
  Name: libscap
  Description: lib for System CAPture
- Version: @FALCOSECURITY_LIBS_VERSION@
+@@ -8,5 +8,5 @@ Version: @FALCOSECURITY_LIBS_VERSION@
  
+ Requires: @LIBSCAP_PKGCONFIG_REQUIRES@
+ Requires.private: @LIBSCAP_PKGCONFIG_REQUIRES_PRIVATE@
 -Libs: -L${libdir} @LIBSCAP_LINK_LIBDIRS_FLAGS@ @LIBSCAP_LINK_LIBRARIES_FLAGS@
--Cflags: -I${includedir}/@LIBS_PACKAGE_NAME@/libscap
 +Libs: -L${libdir} @LIBSCAP_LINK_LIBRARIES_FLAGS@
-+Cflags: -I${includedir}/@LIBS_PACKAGE_NAME@ -I${includedir}/@LIBS_PACKAGE_NAME@/libscap
---- libs-0.18.1/userspace/libsinsp/libsinsp.pc.in.orig	2024-09-25 14:54:11.000000000 +0200
-+++ libs-0.18.1/userspace/libsinsp/libsinsp.pc.in	2024-10-16 19:26:59.433506521 +0200
-@@ -1,11 +1,12 @@
--prefix=${pcfiledir}/../..
+ Cflags: -I${includedir} -I${includedir}/libscap -I${includedir}/driver
+--- libs-0.22.1/userspace/libsinsp/libsinsp.pc.in.orig	2025-10-20 12:37:34.000000000 +0200
++++ libs-0.22.1/userspace/libsinsp/libsinsp.pc.in	2025-11-03 22:25:50.963166641 +0100
+@@ -1,6 +1,6 @@
+-prefix=${pcfiledir}/@PKGCONFIG_RELATIVE_PREFIX@
 -libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@
--includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@/@LIBS_PACKAGE_NAME@
 +prefix=@CMAKE_INSTALL_PREFIX@
 +libdir=@CMAKE_INSTALL_FULL_LIBDIR@
-+includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@/@LIBS_PACKAGE_NAME@
  
  Name: libsinsp
  Description: lib for System INSPection
- Version: @FALCOSECURITY_LIBS_VERSION@
+@@ -8,5 +8,5 @@ Version: @FALCOSECURITY_LIBS_VERSION@
  
- Requires: libscap
--Libs: -L${libdir} -lsinsp @SINSP_PKG_CONFIG_LIBDIRS@ @SINSP_PKG_CONFIG_LIBS@
--Cflags: -I${includedir}/@LIBS_PACKAGE_NAME@/libsinsp @SINSP_PKG_CONFIG_INCLUDES@
-+Libs: -L${libdir} -lsinsp
-+Libs.private: @SINSP_PKG_CONFIG_LIBS@
-+Cflags: -I${includedir}/@LIBS_PACKAGE_NAME@ -I${includedir}/@LIBS_PACKAGE_NAME@/libsinsp -I/usr/include/jsoncpp
+ Requires: libscap @LIBSINSP_REQUIRES@
+ Requires.private: @LIBSINSP_REQUIRES_PRIVATE@
+-Libs: -L${libdir} @SINSP_PKG_CONFIG_LIBDIRS@ @SINSP_PKG_CONFIG_LIBS@
++Libs: -L${libdir} @SINSP_PKG_CONFIG_LIBS@
+ Cflags: -I${includedir} -I${includedir}/libsinsp -I${includedir}/driver @SINSP_PKG_CONFIG_INCLUDES@
