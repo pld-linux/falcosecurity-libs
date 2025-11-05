@@ -5,7 +5,11 @@
 # Conditional build:
 %bcond_without	apidocs		# API documentation
 %bcond_without	static_libs	# static libraries
+%bcond_without	gvisor		# gvisor engine
 #
+%ifnarch %{x8664} x32
+%undefine	with_gvisor
+%endif
 Summary:	Falco foundation libraries
 Summary(pl.UTF-8):	Biblioteki podstawowe Falco
 Name:		falcosecurity-libs
@@ -24,6 +28,7 @@ BuildRequires:	cmake >= 3.12
 # libelf
 BuildRequires:	elfutils-devel
 BuildRequires:	jsoncpp-devel
+%{?with_gvisor:BuildRequires:	protobuf-devel}
 BuildRequires:	re2-devel
 BuildRequires:	tbb-devel
 BuildRequires:	valijson-devel
@@ -52,6 +57,12 @@ Summary:	Header files for Falco libraries
 Summary(pl.UTF-8):	Pliki nagłówkowe bibliotek Falco
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
+%{?with_gvisor:Requires:	protobuf-devel}
+Requires:	elfutils-devel
+Requires:	jsoncpp-devel
+Requires:	re2-devel
+Requires:	tbb-devel
+Requires:	zlib-devel
 
 %description devel
 Header files for Falco library.
@@ -103,6 +114,10 @@ rm -rf $RPM_BUILD_ROOT
 %ghost %{_libdir}/libscap.so.0
 %{_libdir}/libscap_engine_bpf.so.*.*.*
 %ghost %{_libdir}/libscap_engine_bpf.so.0
+%if %{with gvisor}
+%{_libdir}/libscap_engine_gvisor.so.*.*.*
+%ghost %{_libdir}/libscap_engine_gvisor.so.0
+%endif
 %{_libdir}/libscap_engine_kmod.so.*.*.*
 %ghost %{_libdir}/libscap_engine_kmod.so.0
 %{_libdir}/libscap_engine_nodriver.so.*.*.*
@@ -116,6 +131,9 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %{_libdir}/libscap.so
 %{_libdir}/libscap_engine_bpf.so
+%if %{with gvisor}
+%{_libdir}/libscap_engine_gvisor.so
+%endif
 %{_libdir}/libscap_engine_kmod.so
 %{_libdir}/libscap_engine_nodriver.so
 %{_libdir}/libscap_engine_source_plugin.so
