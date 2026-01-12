@@ -14,7 +14,7 @@ Summary:	Falco foundation libraries
 Summary(pl.UTF-8):	Biblioteki podstawowe Falco
 Name:		falcosecurity-libs
 Version:	0.22.1
-Release:	1
+Release:	2
 License:	Apache v2.0
 Group:		Libraries
 #Source0Download: https://github.com/falcosecurity/libs/releases
